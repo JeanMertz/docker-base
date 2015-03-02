@@ -1,0 +1,10 @@
+#!/bin/sh
+set -xe
+
+apk-install -t build-deps g++=4.8.3-r0        \
+                          gcc=4.8.3-r0        \
+                          make=4.1-r0         \
+                          file=5.22-r0        \
+                          autoconf=2.69-r0    \
+                          automake=1.14.1-r0  \
+                          coreutils=8.23-r0

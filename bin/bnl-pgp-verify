@@ -1,0 +1,19 @@
+#!/bin/sh
+set -xe
+
+readonly ID="$1"
+readonly SIG="$2"
+readonly FILE="$3"
+
+if ! command -v gpg &>/dev/null; then
+  echo 'gpg: not found'
+  exit 127
+fi
+
+gpg-agent --daemon
+
+gpg --verbose --keyserver pgp.mit.edu --recv-keys "$ID"
+gpg --verbose --verify "$SIG" "$FILE"
+pgrep gpg-agent | xargs kill
+
+rm "$SIG"

@@ -1,0 +1,6 @@
+#!/bin/sh
+set -xe
+
+apk-install -t download-deps curl=7.39.0-r0 \
+                             tar=1.28-r0    \
+                             gpgme=1.5.1-r0

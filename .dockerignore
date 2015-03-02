@@ -1,0 +1,11 @@
+.dockerignore
+.gitignore
+.drone.yml
+/.bundle/
+/spec/
+/vendor/
+Dockerfile
+Gemfile
+Gemfile.lock
+Rakefile
+README.md

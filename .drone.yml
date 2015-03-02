@@ -1,0 +1,7 @@
+image: blendle/dind-ruby:latest
+script:
+  - bundle install --jobs $(nproc) --retry 5
+  - wrapdocker bundle exec rake
+  - start-stop-daemon --stop --pidfile "/var/run/docker.pid"
+cache:
+  - /usr/local/bundle

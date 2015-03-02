@@ -1,0 +1,19 @@
+#!/bin/sh
+set -xe
+
+if ! command -v make &>/dev/null; then
+  echo 'make: not found'
+  exit 127
+fi
+
+readonly BUILD_PATH="$1"
+
+shift
+
+cd $BUILD_PATH
+./configure "$@"
+make --jobs=$(grep processor /proc/cpuinfo | tail -n1 | awk -F: '{ print $2 + 1 }')
+make install
+cd ..
+
+rm -r $BUILD_PATH

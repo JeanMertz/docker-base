@@ -1,0 +1,35 @@
+#!/bin/sh
+set -xe
+
+if ! command -v curl &>/dev/null; then
+  echo 'curl: not found'
+  exit 127
+fi
+
+if tar --help 2>&1 | grep -qE 'a\s+\(De\)compress using lzma'; then
+  local readonly version=$(tar --help 2>&1 | head -n1 | awk '{ print $2; }')
+  echo "tar: incorrect version: $version, needs: 1.28"
+  exit 1
+fi
+
+readonly ID="$1"
+readonly SIG_URL="$2"
+readonly SIG_NAME="${SIG_URL##*/}"
+
+if [ -n "$3" ]; then
+  readonly FILE_URL="$3"
+else
+  readonly FILE_URL="${SIG_URL%.*}"
+fi
+
+readonly FILE_NAME="${FILE_URL##*/}"
+
+curl -sSL -o "$FILE_NAME" "$FILE_URL"
+curl -sSL -o "$SIG_NAME" "$SIG_URL"
+
+bnl-pgp-verify "$ID" "$SIG_NAME" "$FILE_NAME"
+
+if tar -tf "$FILE_NAME" &>/dev/null; then
+  tar xaf "$FILE_NAME"
+  rm "$FILE_NAME"
+fi
